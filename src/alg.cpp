@@ -8,51 +8,56 @@ int countPairs1(int *arr, int len, int value) {
             }
         }
     }
-    return counter;
+    if (counter == 0)
+    return 0;
+return counter;
 }
 int countPairs2(int *arr, int len, int value) {
     int counter = 0;
-    int start = 0;
     int end = len - 1;
-    while (start < end) {
-        int summa = arr[start] + arr[end];
-        if (summa == value) {
-            counter++;
-            int i = start + 1;
-            while (i < end && arr[i] == arr[i - 1]) {
-                i++;
+    while (arr[end] > value) {
+        end--;
+    }
+    for (int lefter = 0; lefter < end; lefter++) {
+        for (int righter = end; lefter < righter; righter--) {
+            if (arr[lefter] + arr[righter] == value) {
+                counter++;
             }
-            start = i;
-            end--;
-            } else if (summa < value) {
-                start++;
-            } else {
-            end--;
         }
     }
+    if (counter == 0)
+        return 0;
     return counter;
 }
 int countPairs3(int *arr, int len, int value) {
     int counter = 0;
-    for (int i = 0; i < len - 1; i++) {
+    for (int i = 0; i < len; ++i) {
         int left = i + 1;
         int right = len - 1;
+        int secynd = value - arr[i];
         while (left <= right) {
-            int midle = left + (right - left) / 2;
-            if (arr[i] + arr[midle] == value) {
+            int start = (left + right) / 2;
+            if (arr[start] == secynd) {
                 counter++;
-                int j = midle + 1;
-                while (j <= right && arr[midle] == arr[j]) {
+                int midle = start - 1;
+                while ((midle > i) && (arr[midle] == arr[start])) {
                     counter++;
-                    j++;
+                    midle--;
+                }
+                int otr = start + 1;
+                while ((i < otr) && (arr[otr] == arr[start])) {
+                    counter++;
+                    otr++;
                 }
                 break;
-                } else if (arr[i] + arr[midle] < value) {
-                    left = midle + 1;
-                } else {
-                    right = midle - 1;
+                } else if (arr[start] > secynd) {
+                right = start - 1;
+              } else {
+              left = start + 1;
             }
         }
     }
-    return counter;
+    if (counter)
+        return counter;
+    return 0;
 }
